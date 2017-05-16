@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">简</string>
+    <string name="note">在这里添加便签吧</string>
+    <string name="title">标题</string>
+    <string name="title_activity_base"></string>
+    <string name="Edit">编辑</string>
+</resources>
