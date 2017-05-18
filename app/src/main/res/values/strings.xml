@@ -4,4 +4,5 @@
     <string name="note">Add your note here.</string>
     <string name="title_activity_base" translatable="false">BaseActivity</string>
     <string name="Edit">Edit</string>
+    <string name="EditAt">Edited</string>
 </resources>

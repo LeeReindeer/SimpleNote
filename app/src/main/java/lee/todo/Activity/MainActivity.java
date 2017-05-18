@@ -43,6 +43,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         recyclerView.setLayoutManager(manager);
         adapter=new TodoAdapter(MainActivity.this,todoLists);
         recyclerView.setAdapter(adapter);
+        //初始化数据
         initalLits(0);
         floatingButton.setOnClickListener(this);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
@@ -52,12 +53,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 refreshList();
             }
         });
-        //自定义的接口
-
         adapter.setOnItemClickListener(new TodoAdapter.OnItemClickListener() {
+            //自定义的接口,点击编辑
             @Override
             public void onItemClick(View view, int pos) {
-                Toast.makeText(MainActivity.this, pos+"", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, pos+"", Toast.LENGTH_SHORT).show();
+                Log.d("postion",pos+"");
                 String title=todoLists.get(pos).getTitle();
                 String note=todoLists.get(pos).getNote();
                 Intent intent=new Intent(MainActivity.this,UpdateActivity.class);
@@ -65,12 +66,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 intent.putExtra("note",note);
                 startActivity(intent);
             }
-
+            //长按删除
             @Override
             public void onItemLongClick(View view, int pos) {
-                Toast.makeText(MainActivity.this, pos+" long", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, pos+" long", Toast.LENGTH_SHORT).show();
                 String note=todoLists.get(pos).getNote();
-                Log.d("note",note);
+                Log.d("note",pos+" "+note);
                 DataSupport.deleteAll(TodoList.class,"note=?",note);
                 todoLists.remove(pos);
                 adapter.notifyDataSetChanged();
@@ -167,7 +168,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private  void initalLits(int pos){
         todoLists.clear();
         Connector.getDatabase();
-        //从数据库读取
+        //查询数据库
         List<TodoList>todolists=DataSupport.findAll(TodoList.class);
         try {
             for (int i=0;i<todolists.size();i++){
