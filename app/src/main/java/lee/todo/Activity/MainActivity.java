@@ -7,12 +7,12 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 import org.litepal.crud.DataSupport;
 import org.litepal.tablemanager.Connector;
 import java.util.ArrayList;
@@ -26,6 +26,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private SwipeRefreshLayout swipeRefresh;
     private RecyclerView recyclerView;
+    private StaggeredGridLayoutManager manager;
     private List<TodoList> todoLists=new ArrayList<>();
     private TodoAdapter adapter;
     private int row=2;
@@ -39,12 +40,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setSupportActionBar(toolbar);
         recyclerView=(RecyclerView)findViewById(R.id.recycleView);
         FloatingActionButton floatingButton=(FloatingActionButton)findViewById(R.id.float_button);
-        GridLayoutManager manager=new GridLayoutManager(this,row);
+        //GridLayoutManager manager=new GridLayoutManager(this,row);
+        manager=new StaggeredGridLayoutManager(row,StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
         adapter=new TodoAdapter(MainActivity.this,todoLists);
         recyclerView.setAdapter(adapter);
         //初始化数据
-        initalLits(0);
+        initalLits();
         floatingButton.setOnClickListener(this);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -61,6 +63,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Log.d("postion",pos+"");
                 String title=todoLists.get(pos).getTitle();
                 String note=todoLists.get(pos).getNote();
+                Log.d("MainActivity",note);
                 Intent intent=new Intent(MainActivity.this,UpdateActivity.class);
                 intent.putExtra("title",title);
                 intent.putExtra("note",note);
@@ -75,7 +78,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 DataSupport.deleteAll(TodoList.class,"note=?",note);
                 todoLists.remove(pos);
                 adapter.notifyDataSetChanged();
-                //initalLits(pos);
             }
         });
     }
@@ -115,6 +117,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 switchIcon(item);
 
                 break;
+            case R.id.about_item:
+                break;
+            case R.id.search_item:
+                break;
+            case R.id.setting_item:
+                break;
             default:
                 break;
         }
@@ -130,16 +138,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                GridLayoutManager manager=new GridLayoutManager(MainActivity.this,row);
+                RecyclerView recyclerView=(RecyclerView)findViewById(R.id.recycleView);
+                //GridLayoutManager manager=new GridLayoutManager(MainActivity.this,row);
+                manager=new StaggeredGridLayoutManager(row,StaggeredGridLayoutManager.VERTICAL);
                 recyclerView.setLayoutManager(manager);
                 adapter=new TodoAdapter(MainActivity.this,todoLists);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
-                initalLits(0);
+                initalLits();
                 adapter.setOnItemClickListener(new TodoAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int pos) {
-                        Toast.makeText(MainActivity.this, pos+"", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this, pos+"", Toast.LENGTH_SHORT).show();
                         String title=todoLists.get(pos).getTitle();
                         String note=todoLists.get(pos).getNote();
                         Intent intent=new Intent(MainActivity.this,UpdateActivity.class);
@@ -150,7 +160,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                     @Override
                     public void onItemLongClick(View view, int pos) {
-                        Toast.makeText(MainActivity.this, "Deleted!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this, "Deleted!", Toast.LENGTH_SHORT).show();
                         String note=todoLists.get(pos).getNote();
                         Log.d("note",note);
                         DataSupport.deleteAll(TodoList.class,"note=?",note);
@@ -165,7 +175,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         Log.d("MainActivity","switch");
     }
 
-    private  void initalLits(int pos){
+    private  void initalLits(){
         todoLists.clear();
         Connector.getDatabase();
         //查询数据库
@@ -174,10 +184,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             for (int i=0;i<todolists.size();i++){
                 //添加到最前面
                 todoLists.add(0,todolists.get(i));
-                Log.d("todo",todolists.get(i).getTitle()+i);
+                Log.d("initial List",todolists.get(i).getTitle()+i);
             }
             todolists.clear();
-            adapter.notifyItemInserted(pos);
+            adapter.notifyDataSetChanged();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -211,7 +221,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             for (int i=0;i<todolists.size();i++){
                 //添加到最前面
                 todoLists.add(0,todolists.get(i));
-                Log.d("todo",todolists.get(i).getTitle()+i);
+                Log.d("MainActivity-title:",todolists.get(i).getTitle()+i);
             }
             todolists.clear();
             adapter.notifyDataSetChanged();

@@ -4,6 +4,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Toast;
 
 import lee.todo.R;
 
@@ -16,6 +18,5 @@ public class BaseActivity extends AppCompatActivity {
         //子啊这里设置toolbar,子类无效？？
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton floatingButton=(FloatingActionButton)findViewById(R.id.float_button);
     }
 }

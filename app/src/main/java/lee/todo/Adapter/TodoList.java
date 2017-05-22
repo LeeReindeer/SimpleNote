@@ -17,11 +17,6 @@ public class TodoList extends DataSupport{
     private int id;
     private  String time;
 
-    public TodoList() {
-        CalUtil calUtil=new CalUtil();
-        this.time=calUtil.getCurrentDate();
-    }
-
     public String getTime() {
         return time;
     }

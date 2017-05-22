@@ -1,8 +1,11 @@
 <resources>
-    <string name="app_name">Todo</string>
+    <string name="app_name">Do It</string>
     <string name="title">Title</string>
     <string name="note">Add your note here.</string>
     <string name="title_activity_base" translatable="false">BaseActivity</string>
     <string name="Edit">Edit</string>
     <string name="EditAt">Edited</string>
+    <string name="About">About</string>
+    <string name="Setting">Setting</string>
+    <string name="Search">Search</string>
 </resources>
