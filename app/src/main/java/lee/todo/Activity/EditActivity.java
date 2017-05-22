@@ -1,5 +1,6 @@
 package lee.todo.Activity;
 
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -37,10 +38,21 @@ public class EditActivity extends BaseActivity {
                 TodoList todo=new TodoList();
                 todo.setTitle(editTitle.getText().toString());
                 todo.setNote(editNote.getText().toString());
+                CalUtil cal=new CalUtil();
+                todo.setTime(cal.getCurrentDate());
                 todo.save();
                 Toast.makeText(EditActivity.this,"saved",Toast.LENGTH_SHORT).show();
                 finish();
                 //saveLater();
+            }
+        });
+
+        button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                //// TODO: 5/22/17 long click to add notice
+                Toast.makeText(EditActivity.this,"Notice",Toast.LENGTH_SHORT).show();
+                return false;
             }
         });
     }

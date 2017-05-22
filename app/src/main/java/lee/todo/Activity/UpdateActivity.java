@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.litepal.crud.DataSupport;
 
@@ -38,10 +40,13 @@ public class UpdateActivity extends BaseActivity {
         Intent intent=getIntent();
         title=intent.getStringExtra("title");
         note=intent.getStringExtra("note");
+        Log.d("UpdateActivity title",title);
+        Log.d("UpdateActivity note",note);
         String time;
         final String cTime;
         time=getTime(1);
         cTime=getTime(2);
+        Log.d("Ctime",cTime);
         editTitle.setText(title);
         editNote.setText(note);
         textTime.setText("Edited "+time);
@@ -51,8 +56,24 @@ public class UpdateActivity extends BaseActivity {
                 TodoList todo=new TodoList();
                 todo.setTitle(editTitle.getText().toString());
                 todo.setNote(editNote.getText().toString());
-                todo.updateAll("title=? and note=? and time=?",title,note,cTime);
+                todo.setTime(cTime);
+                //内容不变，不跟新时间
+                if (editNote.getText().toString().equals(note)&&
+                        editTitle.getText().toString().equals(title)) {
+                    Log.d("sql","No update");
+                }else {
+                    todo.updateAll("title=? and note=?", title, note);
+                    Log.d("sql","Update");
+                }
                 finish();
+            }
+        });
+        button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                //// TODO: 5/22/17 long click to add notice
+                Toast.makeText(UpdateActivity.this,"Notice",Toast.LENGTH_SHORT).show();
+                return false;
             }
         });
     }
