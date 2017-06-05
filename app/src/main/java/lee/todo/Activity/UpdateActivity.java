@@ -10,22 +10,27 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+
 import org.litepal.crud.DataSupport;
 
+import java.util.Calendar;
 import java.util.List;
 
 import lee.todo.R;
 import lee.todo.Adapter.TodoList;
 import lee.todo.Util.CalUtil;
 
-public class UpdateActivity extends BaseActivity {
+public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener {
 
     private FloatingActionButton button;
     private EditText editTitle;
     private EditText editNote;
     private TextView textTime;
+    private TextView reminder;
     private String title;
     private String note;
+    private String date="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +42,7 @@ public class UpdateActivity extends BaseActivity {
         editTitle=(EditText)findViewById(R.id.titleIn);
         editNote=(EditText)findViewById(R.id.noteIn);
         textTime=(TextView)findViewById(R.id.time_text);
+        reminder=(TextView)findViewById(R.id.reminder_text);
         Intent intent=getIntent();
         title=intent.getStringExtra("title");
         note=intent.getStringExtra("note");
@@ -54,9 +60,11 @@ public class UpdateActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 TodoList todo=new TodoList();
-                todo.setTitle(editTitle.getText().toString());
-                todo.setNote(editNote.getText().toString());
+                //todo.setTitle(editTitle.getText().toString());
+                //todo.setNote(editNote.getText().toString());
                 todo.setTime(cTime);
+                if (!date.equals(""))
+                todo.setRemindTime(date);
                 //内容不变，不跟新时间
                 if (editNote.getText().toString().equals(note)&&
                         editTitle.getText().toString().equals(title)) {
@@ -71,8 +79,15 @@ public class UpdateActivity extends BaseActivity {
         button.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                //// TODO: 5/22/17 long click to add notice
                 Toast.makeText(UpdateActivity.this,"Notice",Toast.LENGTH_SHORT).show();
+                Calendar now = Calendar.getInstance();
+                DatePickerDialog dpd = DatePickerDialog.newInstance(
+                        UpdateActivity.this,
+                        now.get(Calendar.YEAR),
+                        now.get(Calendar.MONTH),
+                        now.get(Calendar.DAY_OF_MONTH)
+                );
+                dpd.show(getFragmentManager(), "Datepickerdialog");
                 return false;
             }
         });
@@ -94,5 +109,12 @@ public class UpdateActivity extends BaseActivity {
                 time=calUtil.getCurrentDate();
         }
         return time;
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        date=dayOfMonth+"/"+(monthOfYear+1)+"/"+year;
+        String mdate = "will remind you on date: "+dayOfMonth+"/"+(monthOfYear+1)+"/"+year;
+        reminder.setText(mdate);
     }
 }
