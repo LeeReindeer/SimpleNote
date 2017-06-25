@@ -21,6 +21,7 @@ import java.util.List;
 import lee.todo.R;
 import lee.todo.Adapter.TodoAdapter;
 import lee.todo.Adapter.TodoList;
+import lee.todo.Service.ReminderService;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -45,6 +46,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         recyclerView.setLayoutManager(manager);
         adapter=new TodoAdapter(MainActivity.this,todoLists);
         recyclerView.setAdapter(adapter);
+        //开启reminderService
+        Intent serviceIntent=new Intent(this, ReminderService.class);
+        startService(serviceIntent);
         //初始化数据
         initalLits();
         floatingButton.setOnClickListener(this);
@@ -118,10 +122,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                 break;
             case R.id.about_item:
+                Intent aboutIntent=new Intent(this,AboutActivity.class);
+                startActivity(aboutIntent);
                 break;
             case R.id.search_item:
                 break;
             case R.id.setting_item:
+                Intent settingIntent=new Intent(this,SettingsActivity.class);
+                startActivity(settingIntent);
                 break;
             default:
                 break;
@@ -152,10 +160,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         //Toast.makeText(MainActivity.this, pos+"", Toast.LENGTH_SHORT).show();
                         String title=todoLists.get(pos).getTitle();
                         String note=todoLists.get(pos).getNote();
-                        Intent intent=new Intent(MainActivity.this,UpdateActivity.class);
-                        intent.putExtra("title",title);
-                        intent.putExtra("note",note);
-                        startActivity(intent);
+                        Intent updataIntent=new Intent(MainActivity.this,UpdateActivity.class);
+                        updataIntent.putExtra("title",title);
+                        updataIntent.putExtra("note",note);
+                        startActivity(updataIntent);
                     }
 
                     @Override
@@ -183,6 +191,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         try {
             for (int i=0;i<todolists.size();i++){
                 //添加到最前面
+                //for (int j=i;j<todolists.size()){
+                //    if (todolists.get(j).getTime()todolists.get(j).getTime())
+                //}
                 todoLists.add(0,todolists.get(i));
                 Log.d("initial List",todolists.get(i).getTitle()+i);
             }

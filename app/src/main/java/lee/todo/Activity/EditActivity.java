@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,7 +28,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     private EditText editNote;
     private TextView textTime;
     private TextView reminder;
-    private String date="";
+    private String date=" ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +52,10 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
                 todo.setNote(editNote.getText().toString());
                 CalUtil cal=new CalUtil();
                 todo.setTime(cal.getCurrentDate());
-                if (!date.equals(""))
-                todo.setRemindTime(date);
+                if (!date.equals(" ")) {
+                    Log.d("MainActivity","save reminder");
+                    todo.setRemindTime(date);
+                }
                 todo.save();
                 Toast.makeText(EditActivity.this,"saved",Toast.LENGTH_SHORT).show();
                 finish();

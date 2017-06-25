@@ -30,7 +30,7 @@ public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnD
     private TextView reminder;
     private String title;
     private String note;
-    private String date="";
+    private String date=" ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,20 +56,23 @@ public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnD
         editTitle.setText(title);
         editNote.setText(note);
         textTime.setText("Edited "+time);
+        reminder.setText("will remind you on date: "+findOne().getRemindTime());
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TodoList todo=new TodoList();
-                //todo.setTitle(editTitle.getText().toString());
-                //todo.setNote(editNote.getText().toString());
+                String mtitle=editTitle.getText().toString();
+                String mnote=editNote.getText().toString();
                 todo.setTime(cTime);
-                if (!date.equals(""))
-                todo.setRemindTime(date);
+                boolean ischanged=!date.equals(" ")||!date.equals(findOne().getRemindTime())
+                        ||!mnote.equals(note)||!mtitle.equals(title);
+
+                todo.setTitle(mtitle);
+                todo.setNote(mnote);
                 //内容不变，不跟新时间
-                if (editNote.getText().toString().equals(note)&&
-                        editTitle.getText().toString().equals(title)) {
-                    Log.d("sql","No update");
-                }else {
+                if (ischanged){
+                    todo.setRemindTime(date);
+                    Log.d("UpdateActivity","save reminder");
                     todo.updateAll("title=? and note=?", title, note);
                     Log.d("sql","Update");
                 }
@@ -109,6 +112,15 @@ public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnD
                 time=calUtil.getCurrentDate();
         }
         return time;
+    }
+
+    private TodoList findOne(){
+        TodoList todo=null;
+        List<TodoList> todolists = DataSupport.where("title=?", title).where("note=?", note).find(TodoList.class);
+        for (TodoList e:todolists){
+            todo=e;
+        }
+        return todo;
     }
 
     @Override
