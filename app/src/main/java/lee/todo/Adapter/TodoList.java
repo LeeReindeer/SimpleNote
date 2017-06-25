@@ -16,6 +16,15 @@ public class TodoList extends DataSupport{
     private String note;
     private int id;
     private  String time;
+    private String remindTime;
+
+    public String getRemindTime() {
+        return remindTime;
+    }
+
+    public void setRemindTime(String remindTime) {
+        this.remindTime = remindTime;
+    }
 
     public String getTime() {
         return time;

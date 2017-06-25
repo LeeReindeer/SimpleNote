@@ -24,6 +24,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder>{
         this.onItemClickListener = onItemClickListener;
     }
 
+    //ClickListener
     public interface OnItemClickListener {
         void onItemClick(View view,int pos);
         void onItemLongClick(View view,int pos);
@@ -34,11 +35,13 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder>{
         View fView;
         TextView edit_title;
         TextView edit_note;
+        TextView reminder;
         public ViewHolder(View view){
             super(view);
             fView=view;
             edit_title=(TextView)view.findViewById(R.id.title) ;
             edit_note=(TextView)view.findViewById(R.id.note);
+            reminder=(TextView)view.findViewById(R.id.show_reminder_text);
         }
     }
     /**
@@ -65,6 +68,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder>{
         TodoList todoList= mTodoList.get(position);
         holder.edit_title.setText(todoList.getTitle());
         holder.edit_note.setText(todoList.getNote());
+        holder.reminder.setText(todoList.getRemindTime());
         if (onItemClickListener !=null){
             holder.fView.setOnClickListener(new View.OnClickListener() {
                 @Override

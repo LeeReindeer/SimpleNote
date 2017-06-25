@@ -20,16 +20,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:label="@string/Edit"
             android:name=".Activity.EditActivity"
+            android:label="@string/Edit"
             android:launchMode="singleTop" />
         <activity android:name=".Activity.BaseActivity" />
         <activity
-            android:label="@string/Edit"
             android:name=".Activity.UpdateActivity"
-            android:launchMode="singleTop">
+            android:label="@string/Edit"
+            android:launchMode="singleTop" />
+        <activity android:name=".Activity.AboutActivity" />
+        <activity
+            android:name=".Activity.SettingsActivity"
+            android:label="@string/title_activity_settings" />
 
-        </activity>
+        <service
+            android:name=".Service.ReminderService"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity android:name=".Activity.SettingActivity"></activity>
     </application>
 
 </manifest>
