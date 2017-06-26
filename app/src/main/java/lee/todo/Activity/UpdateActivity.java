@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,6 +19,7 @@ import java.util.List;
 import lee.todo.R;
 import lee.todo.Adapter.TodoList;
 import lee.todo.Util.CalUtil;
+import lee.todo.Util.LogUtil;
 
 public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener {
 
@@ -31,6 +31,7 @@ public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnD
     private String title;
     private String note;
     private String date=" ";
+    private final static String TAG="UpdateActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +47,13 @@ public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnD
         Intent intent=getIntent();
         title=intent.getStringExtra("title");
         note=intent.getStringExtra("note");
-        Log.d("UpdateActivity title",title);
-        Log.d("UpdateActivity note",note);
+        LogUtil.d(TAG,"title"+title);
+        LogUtil.d(TAG,"note"+note);
         String time;
         final String cTime;
         time=getTime(1);
         cTime=getTime(2);
-        Log.d("Ctime",cTime);
+        LogUtil.d(TAG,"c time"+cTime);
         editTitle.setText(title);
         editNote.setText(note);
         textTime.setText("Edited "+time);
@@ -72,9 +73,9 @@ public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnD
                 //内容不变，不跟新时间
                 if (ischanged){
                     todo.setRemindTime(date);
-                    Log.d("UpdateActivity","save reminder");
+                    LogUtil.d(TAG,"save reminder");
                     todo.updateAll("title=? and note=?", title, note);
-                    Log.d("sql","Update");
+                    LogUtil.d(TAG," data Update");
                 }
                 finish();
             }

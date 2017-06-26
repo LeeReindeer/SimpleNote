@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,6 +19,7 @@ import java.util.Calendar;
 import lee.todo.R;
 import lee.todo.Adapter.TodoList;
 import lee.todo.Util.CalUtil;
+import lee.todo.Util.LogUtil;
 
 public class EditActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener {
 
@@ -29,6 +29,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     private TextView textTime;
     private TextView reminder;
     private String date=" ";
+    private final static String TAG="EditActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
                 CalUtil cal=new CalUtil();
                 todo.setTime(cal.getCurrentDate());
                 if (!date.equals(" ")) {
-                    Log.d("MainActivity","save reminder");
+                    LogUtil.d(TAG,"save reminder");
                     todo.setRemindTime(date);
                 }
                 todo.save();

@@ -9,7 +9,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +21,7 @@ import lee.todo.R;
 import lee.todo.Adapter.TodoAdapter;
 import lee.todo.Adapter.TodoList;
 import lee.todo.Service.ReminderService;
+import lee.todo.Util.LogUtil;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -31,7 +31,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private List<TodoList> todoLists=new ArrayList<>();
     private TodoAdapter adapter;
     private int row=2;
-
+    private final static String TAG="MainActivity";
+    
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -64,10 +65,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onItemClick(View view, int pos) {
                 //Toast.makeText(MainActivity.this, pos+"", Toast.LENGTH_SHORT).show();
-                Log.d("postion",pos+"");
+                LogUtil.d(TAG,pos+"");
                 String title=todoLists.get(pos).getTitle();
                 String note=todoLists.get(pos).getNote();
-                Log.d("MainActivity",note);
+                LogUtil.d("MainActivity",note);
                 Intent intent=new Intent(MainActivity.this,UpdateActivity.class);
                 intent.putExtra("title",title);
                 intent.putExtra("note",note);
@@ -78,7 +79,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             public void onItemLongClick(View view, int pos) {
                 //Toast.makeText(MainActivity.this, pos+" long", Toast.LENGTH_SHORT).show();
                 String note=todoLists.get(pos).getNote();
-                Log.d("note",pos+" "+note);
+                LogUtil.d("note",pos+" "+note);
                 DataSupport.deleteAll(TodoList.class,"note=?",note);
                 todoLists.remove(pos);
                 adapter.notifyDataSetChanged();
@@ -128,8 +129,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.search_item:
                 break;
             case R.id.setting_item:
-                Intent settingIntent=new Intent(this,SettingsActivity.class);
-                startActivity(settingIntent);
+                //Intent settingIntent=new Intent(this,SettingsActivity.class);
+                //startActivity(settingIntent);
                 break;
             default:
                 break;
@@ -170,7 +171,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     public void onItemLongClick(View view, int pos) {
                         //Toast.makeText(MainActivity.this, "Deleted!", Toast.LENGTH_SHORT).show();
                         String note=todoLists.get(pos).getNote();
-                        Log.d("note",note);
+                        LogUtil.d(TAG,"note"+note);
                         DataSupport.deleteAll(TodoList.class,"note=?",note);
                         todoLists.remove(pos);
                         adapter.notifyDataSetChanged();
@@ -180,7 +181,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         });
         adapter.notifyItemRangeChanged(0,adapter.getItemCount());
-        Log.d("MainActivity","switch");
+        LogUtil.d(TAG,"switch");
     }
 
     private  void initalLits(){
@@ -195,7 +196,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 //    if (todolists.get(j).getTime()todolists.get(j).getTime())
                 //}
                 todoLists.add(0,todolists.get(i));
-                Log.d("initial List",todolists.get(i).getTitle()+i);
+                LogUtil.d(TAG,"initial List:"+todolists.get(i).getTitle()+i);
             }
             todolists.clear();
             adapter.notifyDataSetChanged();
@@ -232,7 +233,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             for (int i=0;i<todolists.size();i++){
                 //添加到最前面
                 todoLists.add(0,todolists.get(i));
-                Log.d("MainActivity-title:",todolists.get(i).getTitle()+i);
+                LogUtil.d(TAG,"Title:"+todolists.get(i).getTitle()+i);
             }
             todolists.clear();
             adapter.notifyDataSetChanged();
