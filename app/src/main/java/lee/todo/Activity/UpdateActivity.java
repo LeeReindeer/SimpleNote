@@ -57,7 +57,8 @@ public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnD
         editTitle.setText(title);
         editNote.setText(note);
         textTime.setText("Edited "+time);
-        reminder.setText("will remind you on date: "+findOne().getRemindTime());
+        if (findOne()!=null)
+          reminder.setText("will remind you on date: "+findOne().getRemindTime());
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,9 +103,13 @@ public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnD
         switch (key) {
             //saved time
             case 1:
-                List<TodoList> todolists = DataSupport.where("title=?", title).where("note=?", note).find(TodoList.class);
-                for (TodoList todo : todolists) {
-                    time = todo.getTime();
+                try {
+                    List<TodoList> todolists = DataSupport.where("title=?", title).where("note=?", note).find(TodoList.class);
+                    for (TodoList todo : todolists) {
+                        time = todo.getTime();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
                 break;
             //current time
@@ -117,9 +122,13 @@ public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnD
 
     private TodoList findOne(){
         TodoList todo=null;
-        List<TodoList> todolists = DataSupport.where("title=?", title).where("note=?", note).find(TodoList.class);
-        for (TodoList e:todolists){
-            todo=e;
+        try {
+            List<TodoList> todolists = DataSupport.where("title=?", title).where("note=?", note).find(TodoList.class);
+            for (TodoList e : todolists) {
+                todo = e;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return todo;
     }
