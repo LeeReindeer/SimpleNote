@@ -9,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,6 +51,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         //开启reminderService
         Intent serviceIntent=new Intent(this, ReminderService.class);
         startService(serviceIntent);
+        LogUtil.d(TAG,"service start");
         //初始化数据
         initalLits();
         floatingButton.setOnClickListener(this);
@@ -65,24 +67,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onItemClick(View view, int pos) {
                 //Toast.makeText(MainActivity.this, pos+"", Toast.LENGTH_SHORT).show();
-                LogUtil.d(TAG,pos+"");
-                String title=todoLists.get(pos).getTitle();
-                String note=todoLists.get(pos).getNote();
-                LogUtil.d("MainActivity",note);
-                Intent intent=new Intent(MainActivity.this,UpdateActivity.class);
-                intent.putExtra("title",title);
-                intent.putExtra("note",note);
-                startActivity(intent);
+                startMyActivity(pos,UpdateActivity.class);
             }
-            //长按删除
+            //长按Markdown预览
             @Override
             public void onItemLongClick(View view, int pos) {
                 //Toast.makeText(MainActivity.this, pos+" long", Toast.LENGTH_SHORT).show();
-                String note=todoLists.get(pos).getNote();
+                /*String note=todoLists.get(pos).getNote();
                 LogUtil.d("note",pos+" "+note);
                 DataSupport.deleteAll(TodoList.class,"note=?",note);
                 todoLists.remove(pos);
-                adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();*/
+                startMyActivity(pos,MarkdownActivity.class);
             }
         });
     }
@@ -224,6 +220,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         }).start();
     }
+
+    private void startMyActivity(int pos,Class activity){
+        LogUtil.d(TAG,pos+"");
+        String title=todoLists.get(pos).getTitle();
+        String note=todoLists.get(pos).getNote();
+        LogUtil.d("MainActivity",note);
+        Intent intent=new Intent(MainActivity.this,activity);
+        intent.putExtra("title",title);
+        intent.putExtra("note",note);
+        startActivity(intent);
+    }
+
     @Override
     protected void onPostResume() {
         super.onPostResume();
