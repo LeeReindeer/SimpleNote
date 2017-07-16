@@ -59,6 +59,9 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
                 }
                 todo.save();
                 Toast.makeText(EditActivity.this,"saved",Toast.LENGTH_SHORT).show();
+                LogUtil.d(TAG,"pickDate"+date);
+                CalUtil   calUtil=new CalUtil();
+                LogUtil.d(TAG,"CalDate"+calUtil.getCurrentDate());
                 finish();
                 //saveLater();
             }
@@ -67,7 +70,6 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         button.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                //// TODO: 5/22/17 long click to add notice
                 Toast.makeText(EditActivity.this,"Notice",Toast.LENGTH_SHORT).show();
                 Calendar now = Calendar.getInstance();
                 DatePickerDialog dpd = DatePickerDialog.newInstance(
