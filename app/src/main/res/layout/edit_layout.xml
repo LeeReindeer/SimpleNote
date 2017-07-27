@@ -35,6 +35,14 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:textSize="15sp"/>
+        <TextView
+            android:id="@+id/reminder_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:textSize="15sp"
+            android:hint="   No reminder"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/float_buttonIn"

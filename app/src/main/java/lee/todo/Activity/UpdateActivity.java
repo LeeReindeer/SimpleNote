@@ -57,8 +57,12 @@ public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnD
         editTitle.setText(title);
         editNote.setText(note);
         textTime.setText("Edited "+time);
-        if (findOne()!=null)
-          reminder.setText("will remind you on date: "+findOne().getRemindTime());
+        if (findOne()!=null) {
+            reminder.setText("Will remind you on date: " + findOne().getRemindTime());
+        }
+        if (reminder.getText().toString().equals("Will remind you on date: null")){
+            reminder.setText("No reminder");
+        }
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +75,7 @@ public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnD
 
                 todo.setTitle(mtitle);
                 todo.setNote(mnote);
-                //内容不变，不跟新时间
+                //更新编辑时间
                 if (ischanged){
                     todo.setRemindTime(date);
                     LogUtil.d(TAG,"save reminder");
@@ -81,9 +85,9 @@ public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnD
                 finish();
             }
         });
-        button.setOnLongClickListener(new View.OnLongClickListener() {
+        reminder.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 Toast.makeText(UpdateActivity.this,"Notice",Toast.LENGTH_SHORT).show();
                 Calendar now = Calendar.getInstance();
                 DatePickerDialog dpd = DatePickerDialog.newInstance(
@@ -93,7 +97,6 @@ public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnD
                         now.get(Calendar.DAY_OF_MONTH)
                 );
                 dpd.show(getFragmentManager(), "Datepickerdialog");
-                return false;
             }
         });
     }
