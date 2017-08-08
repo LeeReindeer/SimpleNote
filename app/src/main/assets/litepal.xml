@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+    <dbname value="notes"/>
+    <version value="3"/>
+    <list>
+        <mapping class="lee.simplenote.Note"/>
+        <mapping class="lee.simplenote.Statistics"/>
+    </list>
+</litepal>

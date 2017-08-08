@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">SimpleNote</string>
+    <string name="noteTitle">Title</string>
+    <string name="noteDescription">Description</string>
+    <string name="editTitle">Title</string>
+    <string name="editNote">Add your note here:)</string>
+    <string name="edit">Edit</string>
+    <string name="detail">Note Detail</string>
+    <string name="preview">Note Preview</string>
 </resources>
