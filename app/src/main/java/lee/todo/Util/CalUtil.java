@@ -93,7 +93,7 @@ public class CalUtil {
     public  String getCurrentDate() {
         Date dt = new Date ();
         calendar.setTime (dt);
-        return getMonthInt() + "/" + getDayOfMonth() + "/" +  getYear();
+        return getDayOfMonth() + "/" + getMonthInt() + "/" +  getYear();
 
     }
 

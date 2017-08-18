@@ -18,6 +18,7 @@ import org.litepal.tablemanager.Connector;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
 import lee.todo.R;
 import lee.todo.Adapter.TodoAdapter;
 import lee.todo.Adapter.TodoList;
@@ -28,7 +29,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private SwipeRefreshLayout swipeRefresh;
     private RecyclerView recyclerView;
-    private StaggeredGridLayoutManager manager;
+    private GridLayoutManager manager;
     private List<TodoList> todoLists=new ArrayList<>();
     private TodoAdapter adapter;
     private int row=2;
@@ -43,8 +44,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setSupportActionBar(toolbar);
         recyclerView=(RecyclerView)findViewById(R.id.recycleView);
         FloatingActionButton floatingButton=(FloatingActionButton)findViewById(R.id.float_button);
-        //GridLayoutManager manager=new GridLayoutManager(this,row);
-        manager=new StaggeredGridLayoutManager(row,StaggeredGridLayoutManager.VERTICAL);
+        manager=new GridLayoutManager(this,row);
+        //manager=new StaggeredGridLayoutManager(row,StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
         adapter=new TodoAdapter(MainActivity.this,todoLists);
         recyclerView.setAdapter(adapter);
@@ -54,6 +55,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         LogUtil.d(TAG,"service start");
         //初始化数据
         initalLits();
+        // TODO: 8/18/17 use Realm
+        //Realm.init(this);
         floatingButton.setOnClickListener(this);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -87,10 +90,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch ((v.getId())){
             case R.id.float_button:
-
                 Intent intent=new Intent(this,EditActivity.class);
                 startActivity(intent);
-                TodoList todo=new TodoList();
+                //TodoList todo=new TodoList();
                 //DataSupport.deleteAll(TodoList.class);
                 //Toast.makeText(this,"hi",Toast.LENGTH_SHORT).show();
                 break;
@@ -110,13 +112,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.switch_item:
-                if ((row == 2)) {
-                    row = 1;
-                } else {
-                    row = 2;
-                }
                 switchIcon(item);
-
+                switchLayout();
                 break;
             case R.id.about_item:
                 Intent aboutIntent=new Intent(this,AboutActivity.class);
@@ -140,44 +137,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         } else {
             item.setIcon(getResources().getDrawable(R.drawable.ic_span_1));
         }
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                RecyclerView recyclerView=(RecyclerView)findViewById(R.id.recycleView);
-                //GridLayoutManager manager=new GridLayoutManager(MainActivity.this,row);
-                manager=new StaggeredGridLayoutManager(row,StaggeredGridLayoutManager.VERTICAL);
-                recyclerView.setLayoutManager(manager);
-                adapter=new TodoAdapter(MainActivity.this,todoLists);
-                recyclerView.setAdapter(adapter);
-                recyclerView.setItemAnimator(new DefaultItemAnimator());
-                initalLits();
-                adapter.setOnItemClickListener(new TodoAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int pos) {
-                        //Toast.makeText(MainActivity.this, pos+"", Toast.LENGTH_SHORT).show();
-                        String title=todoLists.get(pos).getTitle();
-                        String note=todoLists.get(pos).getNote();
-                        Intent updataIntent=new Intent(MainActivity.this,UpdateActivity.class);
-                        updataIntent.putExtra("title",title);
-                        updataIntent.putExtra("note",note);
-                        startActivity(updataIntent);
-                    }
+    }
 
-                    @Override
-                    public void onItemLongClick(View view, int pos) {
-                        //Toast.makeText(MainActivity.this, "Deleted!", Toast.LENGTH_SHORT).show();
-                        String note=todoLists.get(pos).getNote();
-                        LogUtil.d(TAG,"note"+note);
-                        DataSupport.deleteAll(TodoList.class,"note=?",note);
-                        todoLists.remove(pos);
-                        adapter.notifyDataSetChanged();
-                    }
-                });
-
-            }
-        });
-        adapter.notifyItemRangeChanged(0,adapter.getItemCount());
-        LogUtil.d(TAG,"switch");
+    private void switchLayout(){
+        if (row==1){
+            manager.setSpanCount(row=2);
+        }else {
+            manager.setSpanCount(row=1);
+        }
+        adapter.notifyItemChanged(0,adapter.getItemCount());
     }
 
     private  void initalLits(){

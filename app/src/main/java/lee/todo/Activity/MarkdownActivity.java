@@ -13,7 +13,6 @@ public class MarkdownActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.markdown_layout);
         MarkdownView markdownView=new MarkdownView(this);
         setContentView(markdownView);
         Intent mark=getIntent();

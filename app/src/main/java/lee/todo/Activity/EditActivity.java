@@ -39,7 +39,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         setSupportActionBar(toolbar);
         button=(FloatingActionButton)findViewById(R.id.float_buttonIn);
         editTitle=(EditText)findViewById(R.id.titleIn);
-        editNote=(EditText)findViewById(R.id.noteIn);
+        final EditText editNote=(EditText)findViewById(R.id.noteIn);
         textTime=(TextView)findViewById(R.id.time_text);
         reminder=(TextView)findViewById(R.id.reminder_text);
 
@@ -48,6 +48,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 TodoList todo=new TodoList();
                 todo.setTitle(editTitle.getText().toString());
                 todo.setNote(editNote.getText().toString());
@@ -67,9 +68,9 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             }
         });
 
-        button.setOnLongClickListener(new View.OnLongClickListener() {
+        reminder.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 Toast.makeText(EditActivity.this,"Notice",Toast.LENGTH_SHORT).show();
                 Calendar now = Calendar.getInstance();
                 DatePickerDialog dpd = DatePickerDialog.newInstance(
@@ -79,9 +80,9 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
                         now.get(Calendar.DAY_OF_MONTH)
                 );
                 dpd.show(getFragmentManager(), "Datepickerdialog");
-                return false;
             }
         });
+
     }
 
     @Override
@@ -89,6 +90,12 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         date=dayOfMonth+"/"+(monthOfYear+1)+"/"+year;
         String mdate = "will remind you on date: "+dayOfMonth+"/"+(monthOfYear+1)+"/"+year;
         reminder.setText(mdate);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        reminder.setText("No reminder");
     }
 }
 
