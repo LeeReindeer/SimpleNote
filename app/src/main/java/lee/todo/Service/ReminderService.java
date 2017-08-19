@@ -16,9 +16,12 @@ import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import lee.todo.Activity.MainActivity;
 import lee.todo.Activity.UpdateActivity;
-import lee.todo.Adapter.TodoList;
+import lee.todo.Adapter.SimpleNote;
 import lee.todo.R;
 import lee.todo.Util.CalUtil;
 import lee.todo.Util.LogUtil;
@@ -26,6 +29,8 @@ import lee.todo.Util.LogUtil;
 public class ReminderService extends Service {
 
     private static final String TAG="ReminderService";
+    private Realm realm;
+
     public ReminderService() {
     }
 
@@ -44,18 +49,19 @@ public class ReminderService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        realm=Realm.getDefaultInstance();
         String title="";
         String note="";
-        List<TodoList>todoLists=findReminder();
+        List<SimpleNote>todoLists=findReminder();
         if (todoLists!=null) {
             Notification notification=null;
             if (todoLists.size() == 1) {
-                TodoList todo = null;
-                for (TodoList each : todoLists) {
-                    todo = each;
+                SimpleNote aNote = null;
+                for (SimpleNote each : todoLists) {
+                    aNote = each;
                 }
-                title = todo.getTitle();
-                note = todo.getNote();
+                title = aNote.getTitle();
+                note = aNote.getNote();
                 LogUtil.d(TAG, "title" + title);
                 LogUtil.d(TAG, "note" + note);
 
@@ -93,10 +99,14 @@ public class ReminderService extends Service {
 
     }
 
-    private List<TodoList> findReminder(){
-        TodoList todo= null;
+    private RealmResults<SimpleNote> findReminder(){
+        SimpleNote note= null;
         CalUtil calUtil=new CalUtil();
-        List<TodoList>todoLists= DataSupport.where("remindTime = ?",calUtil.getCurrentDate()).find(TodoList.class);
-        return todoLists;
+        //List<TodoList>todoLists= DataSupport.where("remindTime = ?",calUtil.getCurrentDate()).find(TodoList.class);
+        RealmQuery<SimpleNote> query=realm.where(SimpleNote.class);
+        RealmResults<SimpleNote>result=realm.where(SimpleNote.class)
+                                            .equalTo("remindTime",calUtil.getCurrentDate())
+                                            .findAll();
+        return result;
     }
 }

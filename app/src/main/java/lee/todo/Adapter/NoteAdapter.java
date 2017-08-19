@@ -14,8 +14,8 @@ import lee.todo.R;
  * @Time 5/15/17.
  */
 
-public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder>{
-    private List<TodoList> mTodoList;
+public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
+    private List<SimpleNote> mNote;
     private Context mContext;
 
     private OnItemClickListener onItemClickListener;
@@ -46,10 +46,10 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder>{
     }
     /**
      *构造方法,外部传入List
-     * @param TodoList
+     * @param Note
      */
-    public TodoAdapter(Context context,List<TodoList> TodoList){
-        this.mTodoList =TodoList;
+    public NoteAdapter(Context context, List<SimpleNote> Note){
+        this.mNote = Note;
         this.mContext=context;
     }
     //创建实例
@@ -65,10 +65,10 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder>{
     //RecyclerView子项赋值
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position){
-        TodoList todoList= mTodoList.get(position);
-        holder.edit_title.setText(todoList.getTitle());
-        holder.edit_note.setText(todoList.getNote());
-        holder.reminder.setText(todoList.getRemindTime());
+        SimpleNote note = mNote.get(position);
+        holder.edit_title.setText(note.getTitle());
+        holder.edit_note.setText(note.getNote());
+        holder.reminder.setText(note.getRemindTime());
         if (onItemClickListener !=null){
             holder.fView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -89,7 +89,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder>{
     }
     @Override
     public int getItemCount(){
-        return mTodoList.size();
+        return mNote.size();
     }
 
 

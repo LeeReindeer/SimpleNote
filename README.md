@@ -1,5 +1,5 @@
-# Todo
-A todo-list app.Simple,but useful.
+# SimpleNote
+A note app.Simple,but useful.
 # Features
 - click to edit
 - long click to Markdown preview
