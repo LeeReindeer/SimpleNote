@@ -10,7 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import org.litepal.crud.DataSupport;
+
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private int row=2;
     private final static String TAG="MainActivity";
     private Realm realm;
+    private MaterialSearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -54,6 +56,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         swipeRefresh=(SwipeRefreshLayout)findViewById(R.id.swipe_layout);
         Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        searchView=(MaterialSearchView)findViewById(R.id.search_view);
         recyclerView=(RecyclerView)findViewById(R.id.recycleView);
         floatingActionButton=(FloatingActionButton)findViewById(R.id.float_button);
         manager=new GridLayoutManager(this,row);
@@ -97,7 +100,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         for (int i=0;i<results.size();i++){
             noteLists.add(0,results.get(i));
         }
-        adapter.notifyItemChanged(0);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -115,7 +118,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.switch_menu, menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 
@@ -131,6 +134,32 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startActivity(aboutIntent);
                 break;
             case R.id.search_item:
+                // TODO: 8/20/17 do search
+                searchView.setMenuItem(item);
+                //item.setVisible(true);
+                searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        return false;
+                    }
+                });
+
+                searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+                    @Override
+                    public void onSearchViewShown() {
+
+                    }
+
+                    @Override
+                    public void onSearchViewClosed() {
+
+                    }
+                });
                 break;
             case R.id.setting_item:
                 //Intent settingIntent=new Intent(this,SettingsActivity.class);

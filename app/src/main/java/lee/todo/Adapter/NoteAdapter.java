@@ -67,7 +67,11 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
     public void onBindViewHolder(final ViewHolder holder, final int position){
         SimpleNote note = mNote.get(position);
         holder.edit_title.setText(note.getTitle());
-        holder.edit_note.setText(note.getNote());
+        if (note.getNote().length()>32){
+            holder.edit_note.setText(note.getNote().substring(0,31)+" ...");
+        }else {
+            holder.edit_note.setText(note.getNote());
+        }
         holder.reminder.setText(note.getRemindTime());
         if (onItemClickListener !=null){
             holder.fView.setOnClickListener(new View.OnClickListener() {

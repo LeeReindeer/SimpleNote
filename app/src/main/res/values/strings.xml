@@ -10,4 +10,6 @@
     <string name="Search">Search</string>
     <string name="title_activity_settings">Settings</string>
     <string name="preset">Showcase</string>
+    <string name="no_reminder">No reminder</string>
+    <string name="image">Image</string>
 </resources>

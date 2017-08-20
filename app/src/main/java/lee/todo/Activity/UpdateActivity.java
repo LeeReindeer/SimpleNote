@@ -6,12 +6,12 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-
-import org.litepal.crud.DataSupport;
 
 import java.util.Calendar;
 import java.util.List;
@@ -30,6 +30,7 @@ public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnD
     private EditText editNote;
     private TextView textTime;
     private TextView reminder;
+    private ImageView imageView;
     private String title;
     private String note;
     private int id;
@@ -40,6 +41,7 @@ public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnD
     private final static int LASTTIME=1;
     private final static int NOWTIME=2;
     private Realm realm;
+    private String imagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnD
         editNote=(EditText)findViewById(R.id.noteIn);
         textTime=(TextView)findViewById(R.id.time_text);
         reminder=(TextView)findViewById(R.id.reminder_text);
+        imageView=(ImageView)findViewById(R.id.image_view);
         Intent intent=getIntent();
         title=intent.getStringExtra("title");
         note=intent.getStringExtra("note");
@@ -71,6 +74,10 @@ public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnD
         textTime.setText("Edited "+time);
         if (findOne()!=null) {
             reminder.setText("Will remind you on date: " + findOne().getRemindTime());
+            if (findOne().getImagePath()!=null)
+                Glide.with(this)
+                     .load(imagePath=findOne().getImagePath())
+                     .into(imageView);
         }
         if (reminder.getText().toString().equals("Will remind you on date: null")){
             reminder.setText("No reminder");
@@ -120,29 +127,7 @@ public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnD
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.float_buttonIn:
-                final SimpleNote aNote=new SimpleNote();
-                String mTitle=editTitle.getText().toString();
-                String mNote=editNote.getText().toString();
-                aNote.setTime(cTime);
-                aNote.setId(id);
-                boolean isChanged=!date.equals(" ")||!date.equals(findOne().getRemindTime())
-                        ||!mNote.equals(note)||!mTitle.equals(title);
-
-                aNote.setTitle(mTitle);
-                aNote.setNote(mNote);
-                //更新编辑时间
-                if (isChanged){
-                    aNote.setRemindTime(date);
-                    LogUtil.d(TAG,"save reminder");
-                    LogUtil.d(TAG," data Update");
-                }
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        //update
-                        realm.copyToRealmOrUpdate(aNote);
-                    }
-                });
+                save();
                 finish();
                 break;
             case R.id.reminder_text:
@@ -157,5 +142,38 @@ public class UpdateActivity extends BaseActivity implements DatePickerDialog.OnD
                 dpd.show(getFragmentManager(), "Datepickerdialog");
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        save();
+    }
+
+    private void save(){
+        final SimpleNote aNote=new SimpleNote();
+        String mTitle=editTitle.getText().toString();
+        String mNote=editNote.getText().toString();
+        aNote.setTime(cTime);
+        aNote.setId(id);
+        aNote.setImagePath(imagePath);
+        boolean isChanged=!date.equals(" ")||!date.equals(findOne().getRemindTime())
+                ||!mNote.equals(note)||!mTitle.equals(title);
+
+        aNote.setTitle(mTitle);
+        aNote.setNote(mNote);
+        //更新编辑时间
+        if (isChanged){
+            aNote.setRemindTime(date);
+            LogUtil.d(TAG,"save reminder");
+            LogUtil.d(TAG," data Update");
+        }
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                //update
+                realm.copyToRealmOrUpdate(aNote);
+            }
+        });
     }
 }

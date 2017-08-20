@@ -5,7 +5,9 @@
     <item
         android:id="@+id/search_item"
         android:title="@string/Search"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_search_white_24dp"/>
     <item
         android:id="@+id/switch_item"
         android:title="switch"

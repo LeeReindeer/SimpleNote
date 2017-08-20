@@ -11,42 +11,65 @@
             <include layout="@layout/appbar"/>
         </android.support.design.widget.AppBarLayout>
 
-        <EditText
-            android:id="@+id/titleIn"
+
+    <EditText
+        android:id="@+id/titleIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:hint="@string/title"
+        android:textSize="30sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/image_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="10dp"
-            android:hint="@string/title"
-            android:textSize="30sp" />
+            android:layout_height="wrap_content" />
+
+    </ScrollView>
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
         <EditText
             android:id="@+id/noteIn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="top"
             android:layout_margin="10dp"
             android:textSize="20sp"
             android:hint="@string/note"
             android:background="@null"/>
-        <TextView
-            android:id="@+id/time_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:textSize="15sp"/>
-        <TextView
-            android:id="@+id/reminder_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:textSize="15sp"
-            android:hint="   No reminder"/>
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/time_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:textSize="15sp"/>
+    <TextView
+        android:id="@+id/reminder_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:textSize="15sp"
+        android:hint="   No reminder"/>
+
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/float_buttonIn"
-        android:src="@drawable/ic_add"
+        android:src="@drawable/ic_add_white_24dp"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_margin="16dp"

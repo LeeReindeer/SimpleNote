@@ -9,7 +9,7 @@ import io.realm.Realm;
  * @Time 8/19/17.
  */
 
-public class MyApplication extends Application {
+public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();

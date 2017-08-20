@@ -19,6 +19,15 @@ public class SimpleNote extends RealmObject {
     @Required
     private  String time;
     private String remindTime;
+    private String imagePath;
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 
     public String getTitle() {
         return title;
